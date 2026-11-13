@@ -64,3 +64,17 @@ jobs:
             gradlew
             gradlew.bat
             gradle/wrapper/gradle-wrapper.jar
+
+      - name: Publish APK to Release
+        if: success()
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ github.run_number }}
+          name: DemoApp build ${{ github.run_number }}
+          body: |
+            Automated debug build of demoapp.
+            Commit: ${{ github.sha }}
+          files: app/build/outputs/apk/debug/app-debug.apk
+          fail_on_unmatched_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
